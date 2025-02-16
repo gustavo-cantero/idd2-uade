@@ -14,8 +14,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <returns>Notificaciones del usuario</returns>
-    [HttpGet("{userId:int}/notifications/")]
-    public async Task<IActionResult> Notifications(int userId) =>
+    [HttpGet("{userId}/notifications/")]
+    public async Task<IActionResult> Notifications(string userId) =>
         Ok(await Data.Session.ListNotifications(config, userId));
 
     /// <summary>
@@ -23,8 +23,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <param name="notification">Notificación</param>
-    [HttpPost("{userId:int}/notifications")]
-    public async Task<IActionResult> AddNotification(int userId, [FromForm] string notification)
+    [HttpPost("{userId}/notifications")]
+    public async Task<IActionResult> AddNotification(string userId, [FromForm] string notification)
     {
         await Data.Session.AddNotification(config, userId, notification);
         return Ok();
@@ -35,8 +35,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <param name="notification">Notificación</param>
-    [HttpDelete("{userId:int}/notifications")]
-    public async Task<IActionResult> RemoveNotification(int userId, [FromForm] string notification)
+    [HttpDelete("{userId}/notifications")]
+    public async Task<IActionResult> RemoveNotification(string userId, [FromForm] string notification)
     {
         await Data.Session.RemoveNotification(config, userId, notification);
         return Ok();
@@ -51,8 +51,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <param name="datos">Datos del producto</param>
-    [HttpPost("{userId:int}/cart")]
-    public async Task<IActionResult> SetProductToCart(int userId, [FromBody] ProductoEnCarritoModel datos)
+    [HttpPost("{userId}/cart")]
+    public async Task<IActionResult> SetProductToCart(string userId, [FromBody] ProductoEnCarritoModel datos)
     {
         if (string.IsNullOrWhiteSpace(datos.productoId) || datos.precio <= 0 || datos.cantidad < 0)
             return BadRequest();
@@ -66,8 +66,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// Limpia el carrito de compras del usuario
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
-    [HttpDelete("{userId:int}/cart/clean")]
-    public async Task<IActionResult> ClearCart(int userId)
+    [HttpDelete("{userId}/cart/clean")]
+    public async Task<IActionResult> ClearCart(string userId)
     {
         await Data.Session.ClearCart(config, userId);
         return Ok();
@@ -78,8 +78,8 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <param name="productId">Identificador del producto</param>
-    [HttpDelete("{userId:int}/cart/{productId}")]
-    public async Task<IActionResult> RemoveFromCart(int userId, string productId)
+    [HttpDelete("{userId}/cart/{productId}")]
+    public async Task<IActionResult> RemoveFromCart(string userId, string productId)
     {
         await Data.Session.RemoveProductFromCart(config, userId, productId);
         return Ok();
@@ -90,8 +90,17 @@ public class SessionController(ConfigurationModel config) : ControllerBase
     /// </summary>
     /// <param name="userId">Identificador del usuario</param>
     /// <returns>Datos del carrito de compras</returns>
-    [HttpGet("{userId:int}/cart")]
-    public async Task<IActionResult> GetCart(int userId) => Ok(await Data.Session.GetCart(config, userId));
+    [HttpGet("{userId}/cart")]
+    public async Task<IActionResult> GetCart(string userId) => Ok(await Data.Session.GetCart(config, userId));
+
+    /// <summary>
+    /// Valida el carrito de compras del usuario, comparando el stock con lo pedido y sin cambió algún precio
+    /// </summary>
+    /// <param name="config"></param>
+    /// <param name="userId"></param>
+    /// <returns>Si se precisó actualizar los datos del carrito, se devuelve el mismo</returns>
+    [HttpGet("{userId}/cart/validate")]
+    public async Task<IActionResult> ValidateCart(string userId) => Ok(await Data.Session.ValidateCart(config, userId));
 
     #endregion
 }

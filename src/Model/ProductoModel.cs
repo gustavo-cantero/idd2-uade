@@ -18,4 +18,5 @@ public class ProductoModel
     public DateTime? fechaModificacion { get; set; }
     public double puntaje { get; set; }
     public IEnumerable<OpinionModel>? opiniones { get; set; } = [];
+    public string urlImagen { get; set; }
 }

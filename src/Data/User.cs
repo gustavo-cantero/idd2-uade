@@ -11,7 +11,7 @@ public static class User
     /// <param name="userId">Identificador del usuario</param>
     /// <param name="productId">identificador del producto</param>
     /// <param name="ammount">Monto de la compra, o null si es una visita</param>
-    public static async Task CreateRelation(ConfigurationModel config, int userId, string productId, double? ammount)
+    public static async Task CreateRelation(ConfigurationModel config, string userId, string productId, double? ammount)
     {
         using var driver = Helpers.CreateNeo4jConnection(config);
         using var session = driver.AsyncSession();
@@ -47,7 +47,7 @@ public static class User
     /// <param name="config">Configuración de la aplicación</param>
     /// <param name="userId">Identificador del usuario</param>
     /// <returns>Categoría del usuario</returns>
-    public static async Task<string> GetCategory(ConfigurationModel config, int userId)
+    public static async Task<string> GetCategory(ConfigurationModel config, string userId)
     {
         using var driver = Helpers.CreateNeo4jConnection(config);
         using var session = driver.AsyncSession();

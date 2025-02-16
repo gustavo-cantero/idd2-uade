@@ -120,6 +120,22 @@ public static class Product
     }
 
     /// <summary>
+    /// Devuelve el precio y stock de un producto
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="id">Identificador del producto</param>
+    /// <returns>Precio y stock del producto, o null en caso de no existir el producto</returns>
+    public static async Task<(double? precio, int? stock)> GetPriceAndStock(ConfigurationModel config, string id)
+    {
+        var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
+        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var res = await collection.Find(filter).Project(p => new { p.precio, p.stock }).FirstOrDefaultAsync();
+        return res != null ? (res.precio, res.stock) : (null, null);
+    }
+
+    /// <summary>
     /// Inserta una opinión en un producto
     /// </summary>
     /// <param name="config">Configuración de la aplicación</param>
@@ -217,5 +233,21 @@ public static class Product
                                     .ToList();
 
         return productos;
+    }
+
+    /// <summary>
+    /// Incrementa el stock de un producto
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="id">Identificador del producto</param>
+    /// <param name="quantity">Cantidad a incrementar</param>
+    public static async Task IncrementStock(ConfigurationModel config, string id, int quantity)
+    {
+        var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
+        var update = Builders<ProductoModel>.Update.Inc(p => p.stock, quantity);
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database);
+        var collection = database.GetCollection<ProductoModel>(COLLECTION);
+        await collection.UpdateOneAsync(filter, update);
     }
 }
