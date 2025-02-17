@@ -1,0 +1,1133 @@
+{
+	"info": {
+		"_postman_id": "008eaad3-5909-4a26-bc66-a6a6307c1e23",
+		"name": "IDD2",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "5745967"
+	},
+	"item": [
+		{
+			"name": "Usuarios",
+			"item": [
+				{
+					"name": "Alta de usuario",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"nombre\": \"j.perez4\",\r\n    \"nombreApellido\": \"Juan Pérez\",\r\n    \"contraseña\": \"123\",\r\n    \"direccion\": \"La Rioja 123\",\r\n    \"provincia\": \"Bs As\",\r\n    \"localidad\": \"CABA\",\r\n    \"telefono\": \"+54 11 45454545\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/user",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Autenticacion",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"nombre\": \"j.perez3\",\r\n    \"contraseña\": \"123\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/user/auth",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"auth"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtiene categoría del usuario",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7233/user/67b28096c440efd496017fc6/category",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"67b28096c440efd496017fc6",
+								"category"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actividad del usuario",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://localhost:7233/user/67b390974a526d5d4e086524/activity",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"67b390974a526d5d4e086524",
+								"activity"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Visita de usuario a producto",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://localhost:7233/user/67b28096c440efd496017fc6/visit/67b206b4016631254f76cc74",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"67b28096c440efd496017fc6",
+								"visit",
+								"67b206b4016631254f76cc74"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualización del usuario",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"id\": \"67b390974a526d5d4e086524\",\r\n    \"nombre\": \"j.perez\",\r\n    \"contraseña\": \"123123\",\r\n    \"nombreApellido\": \"Juan Pérez\",\r\n    \"direccion\": \"La Rioja 456\",\r\n    \"provincia\": \"Bs As\",\r\n    \"localidad\": \"CABA\",\r\n    \"telefono\": \"+54 11 45454545\",\r\n    \"activo\": true\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/user/67b28096c440efd496017fc6",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"67b28096c440efd496017fc6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Desactivación del usuario",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7233/user/67b28096c440efd496017fc6",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"user",
+								"67b28096c440efd496017fc6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Sesión",
+			"item": [
+				{
+					"name": "Notificaciones",
+					"item": [
+						{
+							"name": "Agregado de notificación",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "notification",
+											"value": "Notif. de prueba",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b390974a526d5d4e086524/notifications",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b390974a526d5d4e086524",
+										"notifications"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminación de notificación",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "notification",
+											"value": "222",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b28096c440efd496017fc6/notifications",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b28096c440efd496017fc6",
+										"notifications"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Lista de notificaciones",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": [
+										{
+											"key": "notification",
+											"value": "test",
+											"type": "text"
+										}
+									]
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b390974a526d5d4e086524/notifications",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b390974a526d5d4e086524",
+										"notifications"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Carrito de compras",
+					"item": [
+						{
+							"name": "Agregado de producto",
+							"protocolProfileBehavior": {
+								"disabledSystemHeaders": {
+									"content-type": true
+								}
+							},
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"productoId\": \"67b1fe3e0d0aff5925e49bbf\",\r\n    \"nombre\": \"asdsa\",\r\n    \"precio\": 234,\r\n    \"cantidad\": 9\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b390974a526d5d4e086524/cart",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b390974a526d5d4e086524",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Eliminación de producto",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/1/cart/67b1fe3e0d0aff5925e49bbf",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"1",
+										"cart",
+										"67b1fe3e0d0aff5925e49bbf"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Limpieza del carrito",
+							"request": {
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/1/cart/clean",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"1",
+										"cart",
+										"clean"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Detalle del carrito",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b28096c440efd496017fc6/cart",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b28096c440efd496017fc6",
+										"cart"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Validación del carrito",
+							"protocolProfileBehavior": {
+								"disableBodyPruning": true
+							},
+							"request": {
+								"method": "GET",
+								"header": [],
+								"body": {
+									"mode": "formdata",
+									"formdata": []
+								},
+								"url": {
+									"raw": "https://localhost:7233/session/67b390974a526d5d4e086524/cart/validate",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "7233",
+									"path": [
+										"session",
+										"67b390974a526d5d4e086524",
+										"cart",
+										"validate"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Productos",
+			"item": [
+				{
+					"name": "Alta de producto",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"nombre\": \"producto3\",\r\n    \"precio\": 100,\r\n    \"stock\": 2,\r\n    \"descripcion\": \"Este es un producto de ejemplo\",\r\n    \"categoria\": \"Categoría 1\",\r\n    \"codigoDeBarras\": \"7790000000000\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listado de productos",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    //\"nombre\": \"product1\",\r\n    \"precioMin\": 10,\r\n    \"precioMax\": 10100,\r\n    //\"puntajeMin\": 2,\r\n    \"orden\": \"nombre\", //puntaje, precio\r\n    \"ordenDireccion\": \"desc\",\r\n    \"pagina\": 1,\r\n    \"elementosPorPagina\": 2\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/list",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Historial de productos",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"pagina\": 1,\r\n    \"elementosPorPagina\": 100\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b20b928d0ad26230096326/history",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b20b928d0ad26230096326",
+								"history"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Actualización de producto",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nombre\": \"producto422 nuevo\",\r\n    \"precio\": 100,\r\n    \"stock\": 2,\r\n    \"descripcion\": \"Este es un producto de ejemplo!!\",\r\n    \"categoria\": \"Categoría 1\",\r\n    \"codigoDeBarras\": \"7790000000000\",\r\n    \"urlImagen\": \"https://camoga.ar/media/catalog/product/cache/17183a23c5d57b885c9e1f3d66234d68/1/6/16e07acc35851523128edeb93bda83f2_1.jpg\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b20b928d0ad26230096326",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b20b928d0ad26230096326"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Eliminación del producto",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"67b0ddf40d6cddc903210354\",\r\n    \"nombre\": \"producto2\",\r\n    \"precio\": 100,\r\n    \"stock\": 2,\r\n    \"descripcion\": \"Este es un producto de ejemplo\",\r\n    \"categoria\": \"Categoría 1\",\r\n    \"codigoDeBarras\": \"7790000000000\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b0ddf40d6cddc903210354",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b0ddf40d6cddc903210354"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Insertar opinion",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"puntaje\": 5,\r\n    \"opinion\": \"Todo ok\",\r\n    \"usuario\": \"Juan González\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b20b928d0ad26230096326/opinion",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b20b928d0ad26230096326",
+								"opinion"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Obtener producto",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b206b4016631254f76cc74/67b390974a526d5d4e086524",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b206b4016631254f76cc74",
+								"67b390974a526d5d4e086524"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar precio",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b206b4016631254f76cc74/price/110",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b206b4016631254f76cc74",
+								"price",
+								"110"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Cambiar el stock",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7233/product/67b206b4016631254f76cc74/stock/72",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"product",
+								"67b206b4016631254f76cc74",
+								"stock",
+								"72"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Ventas",
+			"item": [
+				{
+					"name": "Confirmar venta",
+					"protocolProfileBehavior": {
+						"disableBodyPruning": true,
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "https://localhost:7233/sell/67b390974a526d5d4e086524/confirm-cart",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"sell",
+								"67b390974a526d5d4e086524",
+								"confirm-cart"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Registrar pago",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"metodo\": \"efectivo\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/sell/67b390974a526d5d4e086524/pay/67b398464a526d5d4e086525",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"sell",
+								"67b390974a526d5d4e086524",
+								"pay",
+								"67b398464a526d5d4e086525"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listado de compras",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"totalMin\": 0,\r\n    \"totalMax\": 10000,\r\n    \"orden\": \"fecha\", //total\r\n    \"ordenDireccion\": \"desc\",\r\n    \"pagada\": true,\r\n    \"pagina\": 1,\r\n    \"elementosPorPagina\": 20\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/sell/67b390974a526d5d4e086524/list",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"sell",
+								"67b390974a526d5d4e086524",
+								"list"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Listado de facturas",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"numeroMin\": 0,\r\n    \"numeroMax\": 100000,\r\n    \"totalMin\": 0,\r\n    \"totalMax\": 10000,\r\n    \"orden\": \"fecha\", //total\r\n    \"ordenDireccion\": \"desc\",\r\n    \"pagina\": 1,\r\n    \"elementosPorPagina\": 20\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/sell/67b390974a526d5d4e086524/invoices",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"sell",
+								"67b390974a526d5d4e086524",
+								"invoices"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Recomprar",
+					"protocolProfileBehavior": {
+						"disabledSystemHeaders": {
+							"content-type": true
+						}
+					},
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{ \r\n    \"metodo\": \"efectivo\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:7233/sell/67b28096c440efd496017fc6/add-to-cart/67b28bd64c60a602d2371cc6",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "7233",
+							"path": [
+								"sell",
+								"67b28096c440efd496017fc6",
+								"add-to-cart",
+								"67b28bd64c60a602d2371cc6"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
