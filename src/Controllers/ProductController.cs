@@ -132,4 +132,18 @@ public class ProductController(ConfigurationModel config) : ControllerBase
             return Ok();
         return NotFound("No se encontró el producto");
     }
+
+    /// <summary>
+    /// Lista las versiones anteriores de los productos
+    /// </summary>
+    /// <param name="productId">Identificador del producto</param>
+    /// <param name="pag">Filtro para aplicar en la paginación</param>
+    /// <returns>Listado de versiones de un productos</returns>
+    [HttpPost("{id}/history")]
+    public IActionResult ListHistory(string id, [FromBody] PaginadoModel pag)
+    {
+        if (pag == null)
+            return BadRequest("Los filtros son obligatorios");
+        return Ok(Product.ListHistory(config, id, pag));
+    }
 }

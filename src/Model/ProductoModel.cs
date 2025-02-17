@@ -13,10 +13,13 @@ public class ProductoModel
     public int stock { get; set; }
     public string descripcion { get; set; }
     public string categoria { get; set; }
-    public string codigoDeBarras { get; set; }
+    [BsonIgnoreIfNull] // Ignora el campo si es null
+    public string? codigoDeBarras { get; set; }
     public DateTime? fechaCreacion { get; set; }
     public DateTime? fechaModificacion { get; set; }
     public double puntaje { get; set; }
-    public IEnumerable<OpinionModel>? opiniones { get; set; } = [];
-    public string urlImagen { get; set; }
+    [BsonIgnoreIfNull] // Ignora el campo si es null
+    public virtual IEnumerable<OpinionModel>? opiniones { get; set; } = [];
+    [BsonIgnoreIfNull] // Ignora el campo si es null
+    public string? urlImagen { get; set; }
 }

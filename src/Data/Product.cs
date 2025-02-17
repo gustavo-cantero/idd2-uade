@@ -9,7 +9,8 @@ namespace IDD2.Data;
 /// </summary>
 public static class Product
 {
-    private const string COLLECTION = "productos";
+    private const string COLLECTION_PRODUCTS = "productos";
+    private const string COLLECTION_HISTORY = "productosHistorial";
 
     /// <summary>
     /// Inserta un nuevo producto en la base de datos
@@ -20,7 +21,7 @@ public static class Product
     {
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         product.fechaCreacion = DateTime.UtcNow;
         await collection.InsertOneAsync(product);
     }
@@ -33,6 +34,8 @@ public static class Product
     /// <returns>Datos del producto actualizado</returns>
     public static async Task<ProductoModel> Update(ConfigurationModel config, ProductoModel product)
     {
+        await CopyProductToHistory(config, product.id!); //Guardo la versión actual de producto
+
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, product.id);
         var update = Builders<ProductoModel>.Update
             .Set(p => p.fechaModificacion, DateTime.UtcNow)
@@ -45,7 +48,7 @@ public static class Product
 
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         //Actualiza el documento y devuelve el producto actualizado
         return await collection.FindOneAndUpdateAsync(filter, update, new() { ReturnDocument = ReturnDocument.After });
     }
@@ -59,6 +62,8 @@ public static class Product
     /// <returns>Resultado de la grabación</returns>
     public static async Task<bool> SetPrice(ConfigurationModel config, string id, double price)
     {
+        await CopyProductToHistory(config, id); //Guardo la versión actual de producto
+
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         var update = Builders<ProductoModel>.Update
             .Set(p => p.precio, price)
@@ -66,7 +71,7 @@ public static class Product
 
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         //Actualiza el documento y devuelve el producto actualizado
         return (await collection.UpdateOneAsync(filter, update)).MatchedCount > 0;
     }
@@ -87,7 +92,7 @@ public static class Product
 
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         //Actualiza el documento y devuelve el producto actualizado
         return (await collection.UpdateOneAsync(filter, update)).MatchedCount > 0;
     }
@@ -102,7 +107,7 @@ public static class Product
     {
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
 
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         var resultado = await collection.DeleteOneAsync(filter);
@@ -121,7 +126,7 @@ public static class Product
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         return await (await collection.FindAsync(filter)).FirstOrDefaultAsync();
     }
 
@@ -136,7 +141,7 @@ public static class Product
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         return await (await collection.FindAsync(filter)).AnyAsync();
     }
 
@@ -151,7 +156,7 @@ public static class Product
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         var res = await collection.Find(filter).Project(p => new { p.precio, p.stock }).FirstOrDefaultAsync();
         return res != null ? (res.precio, res.stock) : (null, null);
     }
@@ -167,7 +172,7 @@ public static class Product
         var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         return await collection.Find(filter).Project(p => p.nombre).FirstOrDefaultAsync();
     }
 
@@ -187,7 +192,7 @@ public static class Product
 
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
 
         //Grabo la nueva opinión en el producto
         var res = await collection.UpdateOneAsync(filter, update);
@@ -212,7 +217,7 @@ public static class Product
     /// <returns>Listado de productos encontrados</returns>
     public static List<ProductoModel> List(ConfigurationModel config, FiltroProductosModel filtro)
     {
-        // Crear el filtro base
+        // Crear el pag base
         var mongoFiltro = Builders<ProductoModel>.Filter.Empty; // Filtro vacío por defecto
 
         // Filtrar por nombreApellido (si es proporcionado)
@@ -237,7 +242,7 @@ public static class Product
         if (filtro.puntajeMin.HasValue)
             mongoFiltro &= Builders<ProductoModel>.Filter.Gte(p => p.puntaje, filtro.puntajeMin.Value);
 
-        // Definir el orden
+        // Definir el order
         SortDefinition<ProductoModel> orden = Builders<ProductoModel>.Sort.Ascending(p => p.nombre); // Orden por defecto: Ascendente por nombreApellido
 
         if (filtro.ordenPor != null)
@@ -260,7 +265,7 @@ public static class Product
         // Realizo la paginación y ordenamiento
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
-        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS); // nombre de la colección
         return collection.Find(mongoFiltro)
                          .Project<ProductoModel>(Builders<ProductoModel>.Projection.Exclude(p => p.opiniones)) // Excluir 'Opiniones'
                          .Sort(orden)
@@ -281,7 +286,55 @@ public static class Product
         var update = Builders<ProductoModel>.Update.Inc(p => p.stock, quantity);
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database);
-        var collection = database.GetCollection<ProductoModel>(COLLECTION);
+        var collection = database.GetCollection<ProductoModel>(COLLECTION_PRODUCTS);
         await collection.UpdateOneAsync(filter, update);
+    }
+
+    /// <summary>
+    /// Copia un producto a la colección de historial
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="id">Identificador del producto</param>
+    private static async Task CopyProductToHistory(ConfigurationModel config, string id)
+    {
+        var filter = Builders<ProductoHistorialModel>.Filter.Eq(p => p.id, id);
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
+        var collection = database.GetCollection<ProductoHistorialModel>(COLLECTION_PRODUCTS); // colección de productos
+        var prod = await collection
+            .Find(filter)
+            .Project<ProductoHistorialModel>(Builders<ProductoHistorialModel>.Projection.Exclude(p => p.opiniones))
+            .FirstOrDefaultAsync();
+        prod.productId = prod.id!;
+        prod.id = null;
+        prod.opiniones = null;
+        prod.fechaVersion = DateTime.UtcNow;
+        collection = database.GetCollection<ProductoHistorialModel>(COLLECTION_HISTORY); // colección con el historial de los productos
+        await collection.InsertOneAsync(prod);
+    }
+
+    /// <summary>
+    /// Lista las versiones anteriores de los productos
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="productId">Identificador del producto</param>
+    /// <param name="pag">Filtro para aplicar en la paginación</param>
+    /// <returns>Listado de versiones de un productos</returns>
+    public static List<ProductoHistorialModel> ListHistory(ConfigurationModel config, string productId, PaginadoModel pag)
+    {
+        // Crear el pag base
+        var filter = Builders<ProductoHistorialModel>.Filter.Eq(p => p.productId, productId);
+        var order = Builders<ProductoHistorialModel>.Sort.Descending(p => p.fechaVersion);
+
+        // Realizo la paginación y ordenamiento
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
+        var collection = database.GetCollection<ProductoHistorialModel>(COLLECTION_HISTORY); // nombre de la colección
+        return collection.Find(filter)
+                         .Project<ProductoHistorialModel>(Builders<ProductoHistorialModel>.Projection.Exclude(p => p.opiniones)) // Excluir 'Opiniones'
+                         .Sort(order)
+                         .Skip((pag.pagina - 1) * pag.elementosPorPagina)
+                         .Limit(pag.elementosPorPagina)
+                         .ToList();
     }
 }

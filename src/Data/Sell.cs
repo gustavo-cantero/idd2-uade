@@ -178,9 +178,9 @@ public static class Sell
         // Filtrar por pagada o no
         if (filtro.pagada.HasValue)
             if (filtro.pagada.Value)
-                mongoFiltro &= Builders<VentaModel>.Filter.Eq(p => p.facturaId, null);
-            else
                 mongoFiltro &= Builders<VentaModel>.Filter.Ne(p => p.facturaId, null);
+            else
+                mongoFiltro &= Builders<VentaModel>.Filter.Eq(p => p.facturaId, null);
 
         // Definir el orden
         SortDefinition<VentaModel> orden = Builders<VentaModel>.Sort.Descending(p => p.fecha);
