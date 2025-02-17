@@ -2,6 +2,8 @@
 using MongoDB.Driver;
 using Neo4j.Driver;
 using StackExchange.Redis;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace IDD2.Data;
 
@@ -33,4 +35,12 @@ public static class Helpers
     /// <returns>Conexión a la base de datos de Redis</returns>
     public static MongoClient CreateMongoDBConnection(ConfigurationModel config) =>
         new(config.MongoDB.ConnectionString);
+
+    /// <summary>
+    /// Calcula el hash SHA256 de una cadena de texto
+    /// </summary>
+    /// <param name="input">Cadena de texto</param>
+    /// <returns>Hash de la cadena de texto</returns>
+    public static string ComputeSHA256(string input) =>
+        Convert.ToHexString(SHA256.HashData(Encoding.UTF8.GetBytes(input)));
 }

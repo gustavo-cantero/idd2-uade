@@ -52,4 +52,42 @@ public class SellController(ConfigurationModel config) : ControllerBase
 
         return Ok(invoice);
     }
+
+    /// <summary>
+    /// Devuelve la lista de ventas
+    /// </summary>
+    /// <param name="userId">Identificador del usuario</param>
+    /// <param name="filter">Filtros de búsqueda</param>
+    /// <returns>Lista paginada de ventas</returns>
+    [HttpPost("{userId}/list")]
+    public IActionResult List(string userId, [FromBody] FiltroVentasModel filter)
+    {
+        if (filter == null)
+            return BadRequest("Los filtros son obligatorios");
+        return Ok(Sell.List(config, userId, filter));
+    }
+
+    /// <summary>
+    /// Devuelve la lista de facturas
+    /// </summary>
+    /// <param name="userId">Identificador del usuario</param>
+    /// <param name="filter">Filtros de búsqueda</param>
+    /// <returns>Lista paginada de facturas</returns>
+    [HttpPost("{userId}/invoices")]
+    public IActionResult ListInvoices(string userId, [FromBody] FiltroFacturasModel filter)
+    {
+        if (filter == null)
+            return BadRequest("Los filtros son obligatorios");
+        return Ok(Sell.ListInvoices(config, userId, filter));
+    }
+
+    /// <summary>
+    /// Agrega los productos de una compra al carrito
+    /// </summary>
+    /// <param name="userId">Identificador del usuario</param>
+    /// <param name="sellId">Identificador de la venta</param>
+    /// <returns>Resultado de la acción</returns>
+    [HttpPost("{userId}/add-to-cart/{sellId}")]
+    public async Task<IActionResult> AddToCart(string userId, string sellId) =>
+        await Sell.AddToCart(config, userId, sellId) ? Ok() : NotFound();
 }

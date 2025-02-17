@@ -72,6 +72,27 @@ public static class Product
     }
 
     /// <summary>
+    /// Establece el stock de un producto
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="id">Identificador del producto</param>
+    /// <param name="stock">Nuevo stock</param>
+    /// <returns>Resultado de la grabación</returns>
+    public static async Task<bool> SetStock(ConfigurationModel config, string id, int stock)
+    {
+        var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
+        var update = Builders<ProductoModel>.Update
+            .Set(p => p.stock, stock)
+            .Set(p => p.fechaModificacion, DateTime.UtcNow);
+
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
+        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        //Actualiza el documento y devuelve el producto actualizado
+        return (await collection.UpdateOneAsync(filter, update)).MatchedCount > 0;
+    }
+
+    /// <summary>
     /// Elimina un producto de la base de datos
     /// </summary>
     /// <param name="config">Configuración de la aplicación</param>
@@ -136,6 +157,21 @@ public static class Product
     }
 
     /// <summary>
+    /// Devuelve el nombre de un producto
+    /// </summary>
+    /// <param name="config">Configuración de la aplicación</param>
+    /// <param name="id">Identificador del producto</param>
+    /// <returns>Nombre del producto, o null en caso de no existir el producto</returns>
+    public static async Task<string> GetName(ConfigurationModel config, string id)
+    {
+        var filter = Builders<ProductoModel>.Filter.Eq(p => p.id, id);
+        using var client = Helpers.CreateMongoDBConnection(config);
+        var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
+        var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
+        return await collection.Find(filter).Project(p => p.nombre).FirstOrDefaultAsync();
+    }
+
+    /// <summary>
     /// Inserta una opinión en un producto
     /// </summary>
     /// <param name="config">Configuración de la aplicación</param>
@@ -174,12 +210,12 @@ public static class Product
     /// <param name="config">Configuración de la aplicación</param>
     /// <param name="filtro">Filtro para aplicar en la búsqueda</param>
     /// <returns>Listado de productos encontrados</returns>
-    public static List<ProductoModel> List(ConfigurationModel config, FiltroProductos filtro)
+    public static List<ProductoModel> List(ConfigurationModel config, FiltroProductosModel filtro)
     {
         // Crear el filtro base
         var mongoFiltro = Builders<ProductoModel>.Filter.Empty; // Filtro vacío por defecto
 
-        // Filtrar por nombre (si es proporcionado)
+        // Filtrar por nombreApellido (si es proporcionado)
         if (!string.IsNullOrEmpty(filtro.nombre))
             mongoFiltro &= Builders<ProductoModel>.Filter.Regex(p => p.nombre, new BsonRegularExpression(filtro.nombre, "i"));
 
@@ -202,7 +238,7 @@ public static class Product
             mongoFiltro &= Builders<ProductoModel>.Filter.Gte(p => p.puntaje, filtro.puntajeMin.Value);
 
         // Definir el orden
-        SortDefinition<ProductoModel> orden = Builders<ProductoModel>.Sort.Ascending(p => p.nombre); // Orden por defecto: Ascendente por nombre
+        SortDefinition<ProductoModel> orden = Builders<ProductoModel>.Sort.Ascending(p => p.nombre); // Orden por defecto: Ascendente por nombreApellido
 
         if (filtro.ordenPor != null)
         {
@@ -217,7 +253,7 @@ public static class Product
                 "nombre" => filtro.ordenDireccion.ToLower() == "desc"
                                             ? Builders<ProductoModel>.Sort.Descending(p => p.nombre)
                                             : Builders<ProductoModel>.Sort.Ascending(p => p.nombre),
-                _ => Builders<ProductoModel>.Sort.Ascending(p => p.nombre),// Si no se encuentra el campo, ordenar por nombre por defecto
+                _ => Builders<ProductoModel>.Sort.Ascending(p => p.nombre) // Si no se encuentra el campo, ordenar por nombreApellido por defecto
             };
         }
 
@@ -225,14 +261,12 @@ public static class Product
         using var client = Helpers.CreateMongoDBConnection(config);
         var database = client.GetDatabase(config.MongoDB.Database); // nombre de la base de datos
         var collection = database.GetCollection<ProductoModel>(COLLECTION); // nombre de la colección
-        var productos = collection.Find(mongoFiltro)
-                                    .Project<ProductoModel>(Builders<ProductoModel>.Projection.Exclude(p => p.opiniones)) // Excluir 'Opiniones'
-                                    .Sort(orden)
-                                    .Skip((filtro.pagina - 1) * filtro.elementosPorPagina)
-                                    .Limit(filtro.elementosPorPagina)
-                                    .ToList();
-
-        return productos;
+        return collection.Find(mongoFiltro)
+                         .Project<ProductoModel>(Builders<ProductoModel>.Projection.Exclude(p => p.opiniones)) // Excluir 'Opiniones'
+                         .Sort(orden)
+                         .Skip((filtro.pagina - 1) * filtro.elementosPorPagina)
+                         .Limit(filtro.elementosPorPagina)
+                         .ToList();
     }
 
     /// <summary>
